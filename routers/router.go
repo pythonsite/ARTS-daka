@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"sdrms/controllers"
+	"ARTS-daka/controllers"
 	"github.com/astaxie/beego"
 )
 
@@ -18,4 +18,8 @@ func init() {
 
 	beego.Router("/resource/usermenutree", &controllers.ResourceController{}, "POST:UserMenuTree")
 	beego.Router("/resource/checkurlfor", &controllers.ResourceController{}, "POST:CheckUrlFor")
+
+
+	beego.Router("backenduser/index", &controllers.BackendUserController{}, "*:Index")
+	beego.Router("/backenduser/datagrid", &controllers.BackendUserController{}, "POST:DataGrid")
 }

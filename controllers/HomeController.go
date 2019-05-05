@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"github.com/astaxie/beego/logs"
-	"sdrms/models"
-	"sdrms/utils"
+	"ARTS-daka/models"
+	"ARTS-daka/utils"
 	"strings"
 )
 

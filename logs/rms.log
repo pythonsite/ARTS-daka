@@ -1,6 +1,7 @@
-2019/05/05 11:42:51.636 [E]  Connect to the redis host 192.168.188.106:6379 failed
-2019/05/05 11:42:51.636 [E]  cache: unknown adapter name "redis" (forgot to import?)
-2019/05/05 11:45:11.707 [E]  Connect to the redis host 192.168.188.106:6379 failed
-2019/05/05 11:45:11.707 [E]  cache: unknown adapter name "redis" (forgot to import?)
-2019/05/05 11:46:47.231 [E]  Connect to the redis host 192.168.188.106:6379 failed
-2019/05/05 11:46:47.232 [E]  dial tcp 192.168.188.106:6379: connectex: No connection could be made because the target machine actively refused it.
+2019/05/06 00:02:52.153 [D] author control: path=BackendUserController.DataGrid userid=1  无权访问
+2019/05/06 00:13:56.626 [D] author control: path=BackendUserController.DataGrid userid=1  无权访问
+2019/05/06 00:14:01.348 [D] author control: path=BackendUserController.DataGrid userid=1  无权访问
+2019/05/06 00:14:41.171 [D] author control: path=BackendUserController.DataGrid userid=1  无权访问
+2019/05/06 00:14:43.271 [D] author control: path=BackendUserController.DataGrid userid=1  无权访问
+2019/05/06 00:18:11.315 [D] author control: path=BackendUserController.DataGrid userid=1  无权访问
+2019/05/06 00:18:23.124 [D] author control: path=BackendUserController.DataGrid userid=1  无权访问

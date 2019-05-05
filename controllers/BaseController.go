@@ -1,10 +1,11 @@
 package controllers
 
 import (
+	"github.com/astaxie/beego/logs"
 	"fmt"
 	"github.com/astaxie/beego"
-	"sdrms/models"
-	"sdrms/utils"
+	"ARTS-daka/models"
+	"ARTS-daka/utils"
 	"strings"
 )
 
@@ -82,6 +83,8 @@ func (c *BaseController) checkActionAuthor(ctrlName,ActName string) bool {
 	user := c.GetSession("backenduser")
 	//类型断言
 	v, ok := user.(models.BackendUser)
+	logs.Info(v)
+	logs.Info(ok)
 	if ok {
 		//如果是超级管理员，则直接通过
 		if v.IsSuper == true {

@@ -1,13 +1,12 @@
 package main
 
 import (
-	_ "sdrms/routers"
+	_ "ARTS-daka/routers"
 	"github.com/astaxie/beego"
-	_ "sdrms/sysinit"
+	_ "ARTS-daka/sysinit"
 )
 
 func main() {
 	beego.Run("127.0.0.1:8080")
-
 }
 

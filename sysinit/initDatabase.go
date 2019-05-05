@@ -1,7 +1,7 @@
 package sysinit
 
 import (
-	_ "sdrms/models"
+	_ "ARTS-daka/models"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"

@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"sdrms/models"
-	"sdrms/utils"
+	"ARTS-daka/models"
+	"ARTS-daka/utils"
 	"strings"
 )
 

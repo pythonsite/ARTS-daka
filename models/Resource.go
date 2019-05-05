@@ -3,7 +3,7 @@ package models
 import (
 	"github.com/astaxie/beego/orm"
 	"fmt"
-	"sdrms/utils"
+	"ARTS-daka/utils"
 )
 
 // Resource 权限控制资源表

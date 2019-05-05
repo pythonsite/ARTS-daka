@@ -1,6 +1,6 @@
 package models
 
-import "sdrms/utils"
+import "ARTS-daka/utils"
 
 type JsonResult struct {
 	Code utils.JsonResultCode `json:"code"`
