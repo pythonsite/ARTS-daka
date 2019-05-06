@@ -1,6 +1,0 @@
-2019/05/05 11:42:51.636 [E]  Connect to the redis host 192.168.188.106:6379 failed
-2019/05/05 11:42:51.636 [E]  cache: unknown adapter name "redis" (forgot to import?)
-2019/05/05 11:45:11.707 [E]  Connect to the redis host 192.168.188.106:6379 failed
-2019/05/05 11:45:11.707 [E]  cache: unknown adapter name "redis" (forgot to import?)
-2019/05/05 11:46:47.231 [E]  Connect to the redis host 192.168.188.106:6379 failed
-2019/05/05 11:46:47.232 [E]  dial tcp 192.168.188.106:6379: connectex: No connection could be made because the target machine actively refused it.

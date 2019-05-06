@@ -91,6 +91,7 @@ func (c *BaseController) checkActionAuthor(ctrlName,ActName string) bool {
 			return true
 		}
 		//遍历用户所负责的资源列表
+		fmt.Println(v.ResourceUrlForList)
 		for i, _ := range v.ResourceUrlForList {
 			urlfor := strings.TrimSpace(v.ResourceUrlForList[i])
 			if len(urlfor) == 0 {
@@ -120,6 +121,7 @@ func (c *BaseController) checkAuthor(ignores ...string) {
 		}
 	}
 	hasAuthor := c.checkActionAuthor(c.controllerName, c.actionName)
+	fmt.Println(hasAuthor)
 	if !hasAuthor {
 		utils.LogDebug(fmt.Sprintf("author control: path=%s.%s userid=%v  无权访问", c.controllerName, c.actionName, c.curUser.Id))
 		//如果没有权限

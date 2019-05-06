@@ -45,8 +45,8 @@ func BackendUserPageList(params *BackendUserQueryParam)([]*BackendUser, int64) {
 	if params.Order == "desc" {
 		sortorder = "-" + sortorder
 	}
-	query = query.Filter("username__isstartswitch", params.UserNameLike)
-	query = query.Filter("realname__isstartswitch", params.RealNameLike)
+	query = query.Filter("username__istartswith", params.UserNameLike)
+	query = query.Filter("realname__istartswith", params.RealNameLike)
 	if len(params.Mobile) > 0 {
 		query = query.Filter("mobile", params.Mobile)
 	}

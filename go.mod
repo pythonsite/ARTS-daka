@@ -1,4 +1,4 @@
-module sdrms
+module ARTS-daka
 
 go 1.12
 
