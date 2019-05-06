@@ -29,4 +29,8 @@ func init() {
 	beego.Router("/role/datalist", &controllers.RoleController{},"Post:DataList")
 	beego.Router("/role/datagrid", &controllers.RoleController{}, "Get,Post:DataGrid")
 
+	//资源路由
+	beego.Router("/resource/index", &controllers.ResourceController{}, "*:Index")
+	beego.Router("/resource/treegrid", &controllers.ResourceController{}, "POST:TreeGrid")
+	beego.Router("/resource/edit/?:id", &controllers.ResourceController{}, "Get,Post:Edit")
 }
