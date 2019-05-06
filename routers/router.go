@@ -22,4 +22,5 @@ func init() {
 
 	beego.Router("backenduser/index", &controllers.BackendUserController{}, "*:Index")
 	beego.Router("/backenduser/datagrid", &controllers.BackendUserController{}, "POST:DataGrid")
+	beego.Router("/backenduser/edit/?:id", &controllers.BackendUserController{}, "Get,Post:Edit")
 }

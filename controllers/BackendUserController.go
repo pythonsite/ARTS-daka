@@ -2,7 +2,12 @@ package controllers
 
 import (
 	"ARTS-daka/models"
+	"ARTS-daka/utils"
 	"encoding/json"
+	"github.com/astaxie/beego/orm"
+	"fmt"
+	"strconv"
+	"strings"
 )
 
 type BackendUserController  struct {
@@ -44,3 +49,89 @@ func (c *BackendUserController) DataGrid() {
 	c.ServeJSON()
 }
 
+// Edit 添加 编辑 页面
+func (c *BackendUserController) Edit() {
+	// 如果是post请求，交给save处理
+	if c.Ctx.Request.Method == "POST" {
+		c.Save()
+	}
+	Id, _ := c.GetInt(":id", 0)
+	m := &models.BackendUser{}
+	var err error
+	if Id > 0 {
+		m,err = models.BackendUserOne(Id)
+		if err != nil {
+			c.pageError("数据无效，请刷新重试")
+		}
+		o := orm.NewOrm()
+		count, _ := o.LoadRelated(m, "RoleBackendUserRel")
+		fmt.Println(count)
+	} else {
+		// 添加用户默认状态为启用
+		m.Status = utils.Enable
+	}
+	c.Data["m"] = m
+	// 获取关联的roleId列表
+	var roleIds []string
+	for _, item := range m.RoleBackendUserRel {
+		roleIds = append(roleIds, strconv.Itoa(item.Role.Id))
+	}
+	c.Data["roles"] = strings.Join(roleIds, ",")
+	c.setTpl("backenduser/edit.html", "shared/layout_pullbox.html")
+	c.LayoutSections = make(map[string]string)
+	c.LayoutSections["footerjs"] = "backenduser/edit_footerjs.html"
+}
+
+func (c *BackendUserController) Save() {
+	m := models.BackendUser{}
+	o := orm.NewOrm()
+	var err error
+	// 获取form中的值
+	if err = c.ParseForm(&m); err != nil {
+		c.jsonResult(utils.JRCodeFailed,"获取数据失败",m.Id)
+	}
+	// 删除关联的历史数据
+	if _, err := o.QueryTable(models.RoleBackendUserRelTBName()).Filter("backenduser__id",m.Id).Delete();err != nil {
+		c.jsonResult(utils.JRCodeFailed, "删除历史关系失败","")
+	}
+	if m.Id == 0 {
+		m.UserPwd = utils.String2MD5(m.UserPwd)
+		if _, err := o.Insert(&m); err != nil {
+			c.jsonResult(utils.JRCodeFailed, "添加失败", m.Id)
+		}
+	} else {
+		if oM, err := models.BackendUserOne(m.Id);err != nil {
+			c.jsonResult(utils.JRCodeFailed, "数据无效，刷新重试", m.Id)
+		} else {
+			m.UserPwd = strings.TrimSpace(m.UserPwd)
+			if len(m.UserPwd) == 0 {
+				// 如果密码为空则不修改
+				m.UserPwd = oM.UserPwd
+			} else {
+				m.UserPwd = utils.String2MD5(m.UserPwd)
+			}
+			//本页面不修改头像和密码，直接将值附给新m
+			m.Avatar = oM.Avatar
+		}
+		if _, err := o.Update(&m);err != nil {
+			c.jsonResult(utils.JRCodeFailed, "编辑失败", m.Id)
+		}
+	}
+	// 添加关系
+	var relations []models.RoleBackendUserRel
+	for _, roleId := range m.RoleIds {
+		r := models.Role{Id:roleId}
+		relation := models.RoleBackendUserRel{BackendUser:&m,Role:&r}
+		relations = append(relations, relation)
+	}
+	if len(relations) > 0 {
+		// 批量添加
+		if _, err := o.InsertMulti(len(relations), relations);err == nil {
+			c.jsonResult(utils.JRCodeSucc, "保存成功", m.Id)
+		} else {
+			c.jsonResult(utils.JRCodeFailed,"保存失败", m.Id)
+		}
+	} else {
+		c.jsonResult(utils.JRCodeSucc, "保存成功", m.Id)
+	}
+}
