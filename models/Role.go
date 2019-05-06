@@ -36,7 +36,7 @@ func RolePageList(params *RoleQueryParam)([]*Role, int64) {
 	if params.Order == "desc" {
 		sortorder = "-" + sortorder
 	}
-	query = query.Filter("name__isstartswitch", params.NameLike)
+	query = query.Filter("name__istartswith", params.NameLike)
 	total, _ := query.Count()
 	count, _ := query.OrderBy(sortorder).Limit(params.Limit, params.Offset).All(&data)
 	fmt.Println(count)

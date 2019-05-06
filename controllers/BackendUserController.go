@@ -71,7 +71,7 @@ func (c *BackendUserController) Edit() {
 		m.Status = utils.Enable
 	}
 	c.Data["m"] = m
-	// 获取关联的roleId列表
+	//获取关联的roleId列表
 	var roleIds []string
 	for _, item := range m.RoleBackendUserRel {
 		roleIds = append(roleIds, strconv.Itoa(item.Role.Id))
@@ -83,6 +83,7 @@ func (c *BackendUserController) Edit() {
 }
 
 func (c *BackendUserController) Save() {
+	fmt.Println(1111111)
 	m := models.BackendUser{}
 	o := orm.NewOrm()
 	var err error
@@ -133,5 +134,21 @@ func (c *BackendUserController) Save() {
 		}
 	} else {
 		c.jsonResult(utils.JRCodeSucc, "保存成功", m.Id)
+	}
+}
+
+func (c *BackendUserController) Delete() {
+	strs := c.GetString("ids")
+	ids := make([]int, 0, len(strs))
+	for _, str := range strings.Split(strs, ",") {
+		if id, err := strconv.Atoi(str); err == nil {
+			ids = append(ids, id)
+		}
+	}
+	query := orm.NewOrm().QueryTable(models.BackendUserTBName())
+	if num, err := query.Filter("id__in", ids).Delete(); err == nil {
+		c.jsonResult(utils.JRCodeSucc, fmt.Sprintf("成功删除 %d 项", num), 0)
+	} else {
+		c.jsonResult(utils.JRCodeFailed, "删除失败", 0)
 	}
 }

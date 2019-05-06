@@ -23,4 +23,10 @@ func init() {
 	beego.Router("backenduser/index", &controllers.BackendUserController{}, "*:Index")
 	beego.Router("/backenduser/datagrid", &controllers.BackendUserController{}, "POST:DataGrid")
 	beego.Router("/backenduser/edit/?:id", &controllers.BackendUserController{}, "Get,Post:Edit")
+	beego.Router("/backenduser/delete", &controllers.BackendUserController{}, "Post:Delete")
+
+	//用户角色
+	beego.Router("/role/datalist", &controllers.RoleController{},"Post:DataList")
+	beego.Router("/role/datagrid", &controllers.RoleController{}, "Get,Post:DataGrid")
+
 }
