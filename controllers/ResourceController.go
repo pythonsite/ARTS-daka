@@ -3,7 +3,9 @@ package controllers
 import (
 	"ARTS-daka/models"
 	"ARTS-daka/utils"
+	"fmt"
 	"github.com/astaxie/beego/orm"
+	"strconv"
 	"strings"
 )
 
@@ -84,6 +86,22 @@ func (c *ResourceController) CheckUrlFor() {
 	}
 }
 
+func (c *ResourceController) UpdateSeq() {
+
+	Id, _ := c.GetInt("pk", 0)
+	oM, err := models.ResourceOne(Id)
+	if err != nil || oM == nil {
+		c.jsonResult(utils.JRCodeFailed, "选择的数据无效", 0)
+	}
+	value, _ := c.GetInt("value", 0)
+	oM.Seq = value
+	if _, err := orm.NewOrm().Update(oM); err == nil {
+		c.jsonResult(utils.JRCodeSucc, "修改成功", oM.Id)
+	} else {
+		c.jsonResult(utils.JRCodeFailed, "修改失败", oM.Id)
+	}
+}
+
 //Edit 资源编辑页面
 func (c *ResourceController) Edit() {
 	// 需要权限控制
@@ -160,3 +178,56 @@ func (c *ResourceController) Save() {
 
 	}
 }
+
+func (c *ResourceController) Delete() {
+	c.checkAuthor()
+	Id, _ := c.GetInt("Id", 0)
+	if Id == 0 {
+		c.jsonResult(utils.JRCodeFailed, "选择的数据无效", 0)
+	}
+	query := orm.NewOrm().QueryTable(models.ResourceTBName())
+	if _, err := query.Filter("id", Id).Delete(); err == nil {
+		c.jsonResult(utils.JRCodeSucc, fmt.Sprintf("删除成功"), 0)
+	} else {
+		c.jsonResult(utils.JRCodeFailed, "删除失败", 0)
+	}
+}
+
+// Select 通用选择面板
+func (c *ResourceController) Select() {
+	//获取调用者的类别 1表示 角色
+	desttype, _ := c.GetInt("desttype", 0)
+	//获取调用者的值
+	destval, _ := c.GetInt("destval", 0)
+	//返回的资源列表
+	var selectedIds []string
+	o := orm.NewOrm()
+	if desttype > 0 && destval > 0 {
+		//如果都大于0,则获取已选择的值，例如：角色，就是获取某个角色已关联的资源列表
+		switch desttype {
+		case 1:
+			{
+				role := models.Role{Id: destval}
+				_, _ = o.LoadRelated(&role, "RoleResourceRel")
+				for _, item := range role.RoleResourceRel {
+					selectedIds = append(selectedIds, strconv.Itoa(item.Resource.Id))
+				}
+			}
+		}
+	}
+	c.Data["selectedIds"] = strings.Join(selectedIds, ",")
+	c.setTpl("resource/select.html", "shared/layout_pullbox.html")
+	c.LayoutSections = make(map[string]string)
+	c.LayoutSections["headcssjs"] = "resource/select_headcssjs.html"
+	c.LayoutSections["footerjs"] = "resource/select_footerjs.html"
+}
+
+//ParentTreeGrid 获取可以成为某节点的父节点列表
+func (c *ResourceController) ParentTreeGrid() {
+	Id, _ := c.GetInt("id", 0)
+	tree := models.ResourceTreeGrid4Parent(Id)
+	c.UrlFor2Link(tree)
+	c.jsonResult(utils.JRCodeSucc, "", tree)
+}
+
+

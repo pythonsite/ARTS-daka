@@ -33,4 +33,5 @@ func init() {
 	beego.Router("/resource/index", &controllers.ResourceController{}, "*:Index")
 	beego.Router("/resource/treegrid", &controllers.ResourceController{}, "POST:TreeGrid")
 	beego.Router("/resource/edit/?:id", &controllers.ResourceController{}, "Get,Post:Edit")
+	beego.Router("/resource/parent", &controllers.ResourceController{}, "Post:ParentTreeGrid")
 }
